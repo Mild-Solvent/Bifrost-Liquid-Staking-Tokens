@@ -24,52 +24,49 @@ export default function Home() {
         <AIGuardian />
       </main>
 
-      <footer className="flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      <footer className="mt-16 py-8 bg-gradient-to-r from-purple-900/20 to-blue-900/20 backdrop-blur-sm border-t border-gray-800">
+        <div className="max-w-4xl mx-auto px-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="flex flex-col items-center md:items-start">
+              <h3 className="text-xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                Web3 Staking Platform
+              </h3>
+              <p className="text-gray-400 text-sm">Secure • Decentralized • AI-Powered</p>
+            </div>
+            
+            <div className="flex gap-6">
+              <a
+                href="https://docs.example.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors duration-200 flex items-center gap-2"
+              >
+                <Image src="/file.svg" alt="Docs" width={16} height={16} />
+                <span>Docs</span>
+              </a>
+              
+              <a
+                href="https://github.com/example/staking"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors duration-200 flex items-center gap-2"
+              >
+                <Image src="/globe.svg" alt="GitHub" width={16} height={16} />
+                <span>GitHub</span>
+              </a>
+              
+              <a
+                href="https://discord.gg/example"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors duration-200 flex items-center gap-2"
+              >
+                <Image src="/window.svg" alt="Discord" width={16} height={16} />
+                <span>Discord</span>
+              </a>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );
