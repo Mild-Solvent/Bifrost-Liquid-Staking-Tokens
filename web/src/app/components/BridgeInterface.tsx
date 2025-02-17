@@ -16,38 +16,63 @@ export default function BridgeInterface() {
   };
 
   return (
-    <div className="w-full max-w-2xl bg-gray-800 p-6 rounded-2xl space-y-4">
-      <h3 className="text-2xl font-bold text-white mb-4">Cross-Chain Bridge</h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <input
-          type="number"
-          className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-          placeholder="Amount"
-          value={bridgeAmount}
-          onChange={(e) => setBridgeAmount(e.target.value)}
-        />
-        <select 
-          className="px-4 py-3 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-          value={fromChain}
-          onChange={(e) => setFromChain(e.target.value)}
-        >
-          <option>DOT</option>
-          <option>ETH</option>
-        </select>
-        <select 
-          className="px-4 py-3 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-          value={toChain}
-          onChange={(e) => setToChain(e.target.value)}
-        >
-          <option>ETH</option>
-          <option>DOT</option>
-        </select>
+    <div className="card-gradient p-8 rounded-2xl space-y-6">
+      <h3 className="text-xl font-semibold">Cross-Chain Bridge</h3>
+      
+      <div className="flex items-center gap-4">
+        <div className="flex-1 bg-gray-900/50 p-4 rounded-xl">
+          <div className="flex justify-between mb-2">
+            <span className="text-gray-400">From</span>
+            <span className="text-purple-400">Balance: 10.2 DOT</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              className="text-2xl bg-transparent flex-1"
+              value={bridgeAmount}
+              onChange={(e) => setBridgeAmount(e.target.value)}
+            />
+            <select 
+              className="chain-selector"
+              value={fromChain}
+              onChange={(e) => setFromChain(e.target.value)}
+            >
+              <option>DOT</option>
+              <option>ETH</option>
+            </select>
+          </div>
+        </div>
+
+        <button className="p-2 rounded-full bg-gray-800 hover:bg-gray-700">
+          ↔
+        </button>
+
+        <div className="flex-1 bg-gray-900/50 p-4 rounded-xl">
+          <div className="flex justify-between mb-2">
+            <span className="text-gray-400">To</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              readOnly
+              className="text-2xl bg-transparent flex-1 text-gray-400"
+              value={bridgeAmount}
+            />
+            <select
+              className="chain-selector"
+              value={toChain}
+              onChange={(e) => setToChain(e.target.value)}
+            >
+              <option>ETH</option>
+              <option>DOT</option>
+            </select>
+          </div>
+        </div>
       </div>
+
       <button 
         onClick={handleBridge}
-        className="w-full py-3 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-500 hover:to-blue-500 rounded-lg font-semibold text-white transition-all duration-200"
+        className="w-full bg-cyan-600 hover:bg-cyan-700 py-4 rounded-xl font-bold"
       >
-        Bridge Tokens
+        Bridge Now
       </button>
     </div>
   );
