@@ -1,10 +1,16 @@
+'use client';
 import Image from "next/image";
 import StakeCard from "./components/StakeCard";
 import BridgeInterface from "./components/BridgeInterface";
 import RewardVault from "./components/RewardVault";
 import AIGuardian from "./components/AIGuardian";
 import WalletConnect from "./components/WalletConnect";
+import VDotBalance from "./components/VDotBalance";
+import { useState } from "react";
+
 export default function Home() {
+  const [vDotBalance, setVDotBalance] = useState(42.5); // Initial vDOT balance
+
   return (
     <>
       <header className="bg-gradient-to-r from-purple-900/80 to-cyan-900/80 backdrop-blur-lg border-b border-purple-500/20">
@@ -34,8 +40,9 @@ export default function Home() {
 
       <main className="min-h-screen bg-gray-950 text-gray-100 p-8">
         <div className="max-w-6xl mx-auto space-y-8">
-          <div className="grid md:grid-cols-2 gap-8">
-            <StakeCard />
+          <div className="grid md:grid-cols-3 gap-8">
+            <StakeCard onStakeSuccess={(amount) => setVDotBalance(prev => prev + (amount / 10))} />
+            <VDotBalance balance={vDotBalance} />
             <RewardVault rewards={125.5} />
           </div>
           

@@ -44,6 +44,16 @@
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+@keyframes gem-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.animate-gem-pulse {
+  animation: gem-pulse 0.5s ease-in-out;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

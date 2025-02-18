@@ -3,7 +3,9 @@ import { useState } from 'react';
 import { useStaking } from '../hooks/useStaking';
 import SuccessPopup from './SuccessPopup';
 
-export default function StakeCard() {
+export default function StakeCard({ onStakeSuccess }: { 
+  onStakeSuccess?: (amount: number) => void 
+}) {
   const { amount, setAmount, apy, handleStake } = useStaking();
   const [showSuccess, setShowSuccess] = useState(false);
   const [stakedAmount, setStakedAmount] = useState(0);
@@ -11,8 +13,10 @@ export default function StakeCard() {
   const handleSubmit = async () => {
     try {
       const result = await handleStake();
-      setStakedAmount(parseFloat(amount));
-      setShowSuccess(true); 
+      const staked = parseFloat(amount);
+      setStakedAmount(staked);
+      onStakeSuccess?.(staked);
+      setShowSuccess(true);
       setAmount('');
     } catch (error) {
       console.error('Staking failed:', error);
