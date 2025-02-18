@@ -11,6 +11,8 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@polkadot/api": "^15.6.1",
+    "@polkadot/extension-dapp": "^0.58.3",
+    "@polkadot/types": "^15.6.1",
     "framer-motion": "^12.4.3",
     "next": "15.1.7",
     "openai": "^4.85.1",

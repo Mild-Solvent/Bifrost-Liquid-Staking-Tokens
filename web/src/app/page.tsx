@@ -3,7 +3,7 @@ import StakeCard from "./components/StakeCard";
 import BridgeInterface from "./components/BridgeInterface";
 import RewardVault from "./components/RewardVault";
 import AIGuardian from "./components/AIGuardian";
-
+import WalletConnect from "./components/WalletConnect";
 export default function Home() {
   return (
     <>
@@ -27,6 +27,7 @@ export default function Home() {
               <a href="#" className="text-gray-300 hover:text-white">Stake</a>
               <a href="#" className="text-gray-300 hover:text-white">Rewards</a>
             </nav>
+            <WalletConnect />
           </div>
         </div>
       </header>
