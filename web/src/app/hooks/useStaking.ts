@@ -6,9 +6,10 @@ export const useStaking = () => {
   const [apy, setApy] = useState('12.5');
 
   const handleStake = async () => {
-    if (!amount) return;
+    if (!amount) return { success: false };
     const result = await stakeTokens(parseFloat(amount));
     setApy(result.newApy);
+    return { success: true };
   };
 
   return { amount, setAmount, apy, handleStake };

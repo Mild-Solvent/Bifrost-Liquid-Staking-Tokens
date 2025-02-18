@@ -1,12 +1,26 @@
 'use client';
-import { stakeTokens } from '../utils/staking';
-import { useStaking } from '../hoooks/useStaking';
+import { useState } from 'react';
+import { useStaking } from '../hooks/useStaking';
+import SuccessPopup from './SuccessPopup';
 
 export default function StakeCard() {
   const { amount, setAmount, apy, handleStake } = useStaking();
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [stakedAmount, setStakedAmount] = useState(0);
+
+  const handleSubmit = async () => {
+    try {
+      const result = await handleStake();
+      setStakedAmount(parseFloat(amount));
+      setShowSuccess(true); 
+      setAmount('');
+    } catch (error) {
+      console.error('Staking failed:', error);
+    }
+  };
 
   return (
-    <div className="card-gradient p-8 rounded-2xl space-y-6 neon-glow">
+    <div className="card-gradient p-8 rounded-2xl space-y-6 neon-glow relative overflow-hidden">
       <div className="space-y-2">
         <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
           Liquid Staking
@@ -33,10 +47,11 @@ export default function StakeCard() {
       </div>
 
       <button 
-        className="w-full bg-purple-600 hover:bg-purple-700 py-4 rounded-xl font-bold transition-colors"
-        onClick={handleStake}
+        className="w-full bg-purple-600 hover:bg-purple-700 py-4 rounded-xl font-bold transition-colors relative"
+        onClick={handleSubmit}
       >
-        Stake & Earn
+        <span className="relative z-10">Stake & Earn</span>
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-cyan-500/30 animate-pulse" />
       </button>
 
       <div className="grid grid-cols-3 gap-4 text-center">
@@ -53,6 +68,13 @@ export default function StakeCard() {
           <p className="text-xl">$18.7M</p>
         </div>
       </div>
+
+      {showSuccess && (
+        <SuccessPopup 
+          amount={stakedAmount}
+          onClose={() => setShowSuccess(false)}
+        />
+      )}
     </div>
   );
 }
