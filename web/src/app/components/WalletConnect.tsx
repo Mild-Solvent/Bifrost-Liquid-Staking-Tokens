@@ -2,8 +2,13 @@
 import { useWallet } from '../context/WalletContext';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
-export default function WalletConnect() {
+export default function WalletConnect({ onConnect }: { onConnect?: () => void }) {
   const { isConnected, selectedAccount, connect, disconnect } = useWallet();
+
+  const handleConnect = () => {
+    connect();
+    onConnect?.();
+  };
 
   return (
     <div className="card-gradient p-4 rounded-xl flex items-center gap-4">
@@ -27,7 +32,7 @@ export default function WalletConnect() {
         </>
       ) : (
         <button
-          onClick={connect}
+          onClick={handleConnect}
           className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-lg transition-colors"
         >
           <img 
