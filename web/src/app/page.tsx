@@ -17,10 +17,56 @@ export default function Home() {
   const [showNewQuest, setShowNewQuest] = useState(false);
   const [hasExploredRewards, setHasExploredRewards] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [particles, setParticles] = useState(Array(20).fill(null).map(() => ({
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    baseX: Math.random() * 100,
+    baseY: Math.random() * 100,
+    size: Math.random() * 50 + 30,
+    animationDelay: Math.random() * 10,
+    animationDuration: Math.random() * 10 + 20,
+  })));
 
   // Add mount detection
   useEffect(() => {
     setHasMounted(true);
+  }, []);
+
+  // Add mouse move tracking
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+      setMousePosition({ x, y });
+
+      // Update particle positions based on cursor proximity
+      setParticles(prevParticles => prevParticles.map(particle => {
+        const dx = x - particle.baseX;
+        const dy = y - particle.baseY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const repulsionRadius = 20; // Adjust this value to change the repulsion range
+        const repulsionStrength = 15; // Adjust this value to change the repulsion force
+
+        if (distance < repulsionRadius) {
+          const force = (1 - distance / repulsionRadius) * repulsionStrength;
+          return {
+            ...particle,
+            x: particle.baseX - (dx / distance) * force,
+            y: particle.baseY - (dy / distance) * force,
+          };
+        }
+
+        return {
+          ...particle,
+          x: particle.baseX,
+          y: particle.baseY,
+        };
+      }));
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   // Remove scroll effect
@@ -57,17 +103,19 @@ export default function Home() {
     }
   }, [completedSteps, showNewQuest]);
 
-  // Generate random positions with seamless rotation animation
-  const generateRandomStyle = () => {
+  // Update the generateRandomStyle function
+  const generateRandomStyle = (index: number) => {
     if (!hasMounted) return {};
+    const particle = particles[index];
     return {
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      width: `${Math.random() * 50 + 30}px`,
-      height: `${Math.random() * 50 + 30}px`,
-      animationDelay: `${Math.random() * 10}s`,
-      animationDuration: `${Math.random() * 10 + 20}s`,
-      opacity: '0.15'
+      left: `${particle.x}%`,
+      top: `${particle.y}%`,
+      width: `${particle.size}px`,
+      height: `${particle.size}px`,
+      animationDelay: `${particle.animationDelay}s`,
+      animationDuration: `${particle.animationDuration}s`,
+      opacity: '0.15',
+      transition: 'all 0.3s ease-out', // Add smooth transition
     };
   };
 
@@ -75,11 +123,11 @@ export default function Home() {
     <>
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute inset-0" style={gradientStyle}></div>
-        {hasMounted && [...Array(20)].map((_, i) => (
+        {hasMounted && particles.map((_, i) => (
           <div
             key={i}
-            className="absolute bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg animate-float animate-spin-slow pointer-events-none"
-            style={generateRandomStyle()}
+            className="absolute bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg animate-spin-slow pointer-events-none"
+            style={generateRandomStyle(i)}
           />
         ))}
       </div>
