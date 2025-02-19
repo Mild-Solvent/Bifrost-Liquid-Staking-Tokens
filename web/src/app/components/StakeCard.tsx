@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useStaking } from '../hooks/useStaking';
 import SuccessPopup from './SuccessPopup';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 export default function StakeCard({ onStakeSuccess }: { 
   onStakeSuccess?: (amount: number) => void 
@@ -9,6 +10,7 @@ export default function StakeCard({ onStakeSuccess }: {
   const { amount, setAmount, apy, handleStake } = useStaking();
   const [showSuccess, setShowSuccess] = useState(false);
   const [stakedAmount, setStakedAmount] = useState(0);
+  const scrollRef = useScrollAnimation();
 
   const handleSubmit = async () => {
     try {
@@ -24,7 +26,7 @@ export default function StakeCard({ onStakeSuccess }: {
   };
 
   return (
-    <div className="card-gradient p-8 rounded-2xl space-y-6 neon-glow relative overflow-hidden">
+    <div ref={scrollRef} className="card-gradient p-8 rounded-2xl space-y-6 neon-glow relative overflow-hidden fade-up">
       <div className="space-y-2">
         <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
           Liquid Staking

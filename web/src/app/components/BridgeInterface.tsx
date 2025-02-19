@@ -1,6 +1,7 @@
 'use client';
 import { useState, useRef } from 'react';
 import SuccessPopup from './SuccessPopup';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 export default function BridgeInterface({ onBridgeSuccess }: { onBridgeSuccess?: () => void }) {
   const [bridgeAmount, setBridgeAmount] = useState('');
@@ -10,6 +11,7 @@ export default function BridgeInterface({ onBridgeSuccess }: { onBridgeSuccess?:
   const [dragActive, setDragActive] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const modalAmountRef = useRef<HTMLInputElement>(null);
+  const scrollRef = useScrollAnimation();
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -52,7 +54,7 @@ export default function BridgeInterface({ onBridgeSuccess }: { onBridgeSuccess?:
   };
 
   return (
-    <div className="card-gradient p-8 rounded-2xl space-y-6 relative">
+    <div ref={scrollRef} className="card-gradient p-8 rounded-2xl space-y-6 relative fade-up">
       <div 
         className={`absolute inset-0 rounded-2xl border-2 border-dashed pointer-events-none ${
           dragActive ? 'border-purple-500 bg-purple-500/10' : 'border-transparent'

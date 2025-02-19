@@ -16,6 +16,31 @@ export default function Home() {
   const [hasBridged, setHasBridged] = useState(false);
   const [showNewQuest, setShowNewQuest] = useState(false);
   const [hasExploredRewards, setHasExploredRewards] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  // Add scroll handler
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Calculate dynamic gradient based on scroll
+  const gradientStyle = {
+    backgroundImage: `linear-gradient(to bottom right, 
+      rgb(3, 7, 18) ${scrollProgress}%, 
+      rgba(88, 28, 135, 0.6) ${scrollProgress + 40}%, 
+      rgba(8, 145, 178, 0.5) ${scrollProgress + 80}%,
+      rgba(139, 92, 246, 0.3) ${scrollProgress + 100}%
+    )`,
+    backgroundSize: '400% 400%',
+    transition: 'background-image 0.5s ease-out'
+  };
 
   // Calculate progress percentage
   const completedSteps = [hasConnectedWallet, hasStaked, hasBridged].filter(Boolean).length;
@@ -41,7 +66,7 @@ export default function Home() {
 
   return (
     <>
-      <header className="bg-gradient-to-r from-purple-900/80 to-cyan-900/80 backdrop-blur-lg border-b border-purple-500/20">
+      <header className="bg-gradient-to-r from-purple-900/80 to-cyan-900/80 backdrop-blur-lg border-b border-purple-500/20 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto py-6 px-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -66,9 +91,9 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="min-h-screen bg-gray-950 text-gray-100 p-8">
-        <div className="max-w-6xl mx-auto space-y-8">
-          <div id="quest-bar" className="bg-gray-900/50 rounded-xl p-4 transition-all duration-500">
+      <main className="min-h-screen text-gray-100 p-8" style={gradientStyle}>
+        <div className="max-w-6xl mx-auto space-y-16">
+          <div id="quest-bar" className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-4 transition-all duration-500 fade-in">
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-semibold">
                 {showNewQuest ? "New Quest Available!" : "Onboarding Quest"}
@@ -132,19 +157,27 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <StakeCard 
-              onStakeSuccess={(amount) => {
-                setVDotBalance(prev => prev + (amount / 10));
-                setHasStaked(true);
-              }}
-            />
-            <VDotBalance balance={vDotBalance} />
-            <RewardVault rewards={125.5} />
+            <div className="fade-up" style={{ transitionDelay: '0.1s' }}>
+              <StakeCard 
+                onStakeSuccess={(amount) => {
+                  setVDotBalance(prev => prev + (amount / 10));
+                  setHasStaked(true);
+                }}
+              />
+            </div>
+            <div className="fade-up" style={{ transitionDelay: '0.2s' }}>
+              <VDotBalance balance={vDotBalance} />
+            </div>
+            <div className="fade-up" style={{ transitionDelay: '0.3s' }}>
+              <RewardVault rewards={125.5} />
+            </div>
           </div>
           
-          <BridgeInterface onBridgeSuccess={() => setHasBridged(true)} />
+          <div className="fade-up" style={{ transitionDelay: '0.4s' }}>
+            <BridgeInterface onBridgeSuccess={() => setHasBridged(true)} />
+          </div>
           
-          <div className="flex justify-center w-full">
+          <div className="flex justify-center w-full fade-up" style={{ transitionDelay: '0.5s' }}>
             <div className="w-full max-w-2xl">
               <AIGuardian />
             </div>
