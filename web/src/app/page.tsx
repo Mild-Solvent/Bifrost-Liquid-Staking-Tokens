@@ -36,13 +36,13 @@ export default function Home() {
     setHasMounted(true);
   }, []);
 
-  // Calculate dynamic gradient based on scroll
+  // Calculate dynamic gradient based on scroll - adjusted for subtler effect
   const gradientStyle = {
     backgroundImage: `linear-gradient(to bottom right, 
-      rgb(3, 7, 18) ${scrollProgress}%, 
-      rgba(88, 28, 135, 0.6) ${scrollProgress + 40}%, 
-      rgba(8, 145, 178, 0.5) ${scrollProgress + 80}%,
-      rgba(139, 92, 246, 0.3) ${scrollProgress + 100}%
+      rgb(3, 7, 18) ${Math.min(scrollProgress, 20)}%, 
+      rgba(88, 28, 135, 0.6) ${Math.min(scrollProgress + 60, 80)}%, 
+      rgba(8, 145, 178, 0.5) ${Math.min(scrollProgress + 90, 110)}%,
+      rgba(139, 92, 246, 0.3) ${Math.min(scrollProgress + 120, 140)}%
     )`,
     backgroundSize: '400% 400%',
     transition: 'background-image 0.5s ease-out'
@@ -70,16 +70,18 @@ export default function Home() {
     }
   }, [completedSteps, showNewQuest]);
 
-  // Generate random positions only on client
+  // Generate random positions with more consistent opacity and size
   const generateRandomStyle = () => {
     if (!hasMounted) return {};
     return {
       left: `${Math.random() * 100}%`,
       top: `${Math.random() * 100}%`,
-      width: `${Math.random() * 100 + 50}px`,
-      height: `${Math.random() * 100 + 50}px`,
+      width: `${Math.random() * 50 + 30}px`,
+      height: `${Math.random() * 50 + 30}px`,
       animationDelay: `${Math.random() * 10}s`,
-      transform: `rotate(${Math.random() * 360}deg)`
+      animationDuration: `${Math.random() * 10 + 20}s`,
+      transform: `rotate(${Math.random() * 360}deg)`,
+      opacity: '0.15'
     };
   };
 
@@ -90,7 +92,7 @@ export default function Home() {
         {hasMounted && [...Array(20)].map((_, i) => (
           <div
             key={i}
-            className="absolute opacity-20 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg animate-float pointer-events-none"
+            className="absolute bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg animate-float pointer-events-none"
             style={generateRandomStyle()}
           />
         ))}
