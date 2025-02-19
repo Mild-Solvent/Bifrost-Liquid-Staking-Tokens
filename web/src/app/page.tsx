@@ -16,33 +16,20 @@ export default function Home() {
   const [hasBridged, setHasBridged] = useState(false);
   const [showNewQuest, setShowNewQuest] = useState(false);
   const [hasExploredRewards, setHasExploredRewards] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [hasMounted, setHasMounted] = useState(false);
-
-  // Add scroll handler
-  useEffect(() => {
-    const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (window.scrollY / totalHeight) * 100;
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Add mount detection
   useEffect(() => {
     setHasMounted(true);
   }, []);
 
-  // Calculate dynamic gradient based on scroll - adjusted for subtler effect
+  // Remove scroll effect
   const gradientStyle = {
     backgroundImage: `linear-gradient(to bottom right, 
-      rgb(3, 7, 18) ${Math.min(scrollProgress, 20)}%, 
-      rgba(88, 28, 135, 0.6) ${Math.min(scrollProgress + 60, 80)}%, 
-      rgba(8, 145, 178, 0.5) ${Math.min(scrollProgress + 90, 110)}%,
-      rgba(139, 92, 246, 0.3) ${Math.min(scrollProgress + 120, 140)}%
+      rgb(3, 7, 18) 20%, 
+      rgba(88, 28, 135, 0.6) 80%, 
+      rgba(8, 145, 178, 0.5) 110%,
+      rgba(139, 92, 246, 0.3) 140%
     )`,
     backgroundSize: '400% 400%',
     transition: 'background-image 0.5s ease-out'
@@ -70,7 +57,7 @@ export default function Home() {
     }
   }, [completedSteps, showNewQuest]);
 
-  // Generate random positions with more consistent opacity and size
+  // Generate random positions with seamless rotation animation
   const generateRandomStyle = () => {
     if (!hasMounted) return {};
     return {
@@ -80,7 +67,6 @@ export default function Home() {
       height: `${Math.random() * 50 + 30}px`,
       animationDelay: `${Math.random() * 10}s`,
       animationDuration: `${Math.random() * 10 + 20}s`,
-      transform: `rotate(${Math.random() * 360}deg)`,
       opacity: '0.15'
     };
   };
@@ -92,7 +78,7 @@ export default function Home() {
         {hasMounted && [...Array(20)].map((_, i) => (
           <div
             key={i}
-            className="absolute bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg animate-float pointer-events-none"
+            className="absolute bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg animate-float animate-spin-slow pointer-events-none"
             style={generateRandomStyle()}
           />
         ))}
