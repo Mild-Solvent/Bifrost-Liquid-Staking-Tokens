@@ -17,6 +17,7 @@ export default function Home() {
   const [showNewQuest, setShowNewQuest] = useState(false);
   const [hasExploredRewards, setHasExploredRewards] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [hasMounted, setHasMounted] = useState(false);
 
   // Add scroll handler
   useEffect(() => {
@@ -28,6 +29,11 @@ export default function Home() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Add mount detection
+  useEffect(() => {
+    setHasMounted(true);
   }, []);
 
   // Calculate dynamic gradient based on scroll
@@ -64,8 +70,32 @@ export default function Home() {
     }
   }, [completedSteps, showNewQuest]);
 
+  // Generate random positions only on client
+  const generateRandomStyle = () => {
+    if (!hasMounted) return {};
+    return {
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      width: `${Math.random() * 100 + 50}px`,
+      height: `${Math.random() * 100 + 50}px`,
+      animationDelay: `${Math.random() * 10}s`,
+      transform: `rotate(${Math.random() * 360}deg)`
+    };
+  };
+
   return (
     <>
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0" style={gradientStyle}></div>
+        {hasMounted && [...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute opacity-20 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg animate-float pointer-events-none"
+            style={generateRandomStyle()}
+          />
+        ))}
+      </div>
+
       <header className="bg-gradient-to-r from-purple-900/80 to-cyan-900/80 backdrop-blur-lg border-b border-purple-500/20 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto py-6 px-8">
           <div className="flex items-center justify-between">
@@ -91,7 +121,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="min-h-screen text-gray-100 p-8" style={gradientStyle}>
+      <main className="min-h-screen text-gray-100 p-8">
         <div className="max-w-6xl mx-auto space-y-16">
           <div id="quest-bar" className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-4 transition-all duration-500 fade-in">
             <div className="flex items-center justify-between mb-2">

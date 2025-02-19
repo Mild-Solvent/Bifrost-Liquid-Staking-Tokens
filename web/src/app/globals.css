@@ -125,6 +125,33 @@
   animation: gradient 15s ease infinite;
 }
 
+@keyframes float {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.15;
+  }
+  25% {
+    transform: translate(50px, 50px) rotate(45deg);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(0, 100px) rotate(90deg);
+    opacity: 0.15;
+  }
+  75% {
+    transform: translate(-50px, 50px) rotate(135deg);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translate(0, 0) rotate(180deg);
+    opacity: 0.15;
+  }
+}
+
+.animate-float {
+  animation: float 30s linear infinite;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
