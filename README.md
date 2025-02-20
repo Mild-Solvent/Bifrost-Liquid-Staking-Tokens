@@ -15,6 +15,10 @@ Bifrost Liquid Staking UX transforms complex blockchain operations into intuitiv
 
 **Live Demo**: [Bifrost Staking Portal](https://bifrost-liquid-staking-demo.netlify.app)
 
+![BiFrost](./Decentralized%20Academic%20Paper%20management.png)
+
+**YouTube**: [Bifrost Staking Portal](https://www.youtube.com/watch?v=ivRxDm44lVw&feature=youtu.be)
+
 ## Key Features
 
 ### 🤖 AI-Driven Staking Strategies
