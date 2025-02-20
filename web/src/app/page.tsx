@@ -9,6 +9,19 @@ import VDotBalance from "./components/VDotBalance";
 import { useState, useEffect } from "react";
 import { CheckCircleIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 
+// Add these new interfaces above the Home component
+interface Particle {
+  x: number;
+  y: number;
+  baseX: number;
+  baseY: number;
+  size: number;
+  animationDelay: number;
+  animationDuration: number;
+  targetX?: number;
+  targetY?: number;
+}
+
 export default function Home() {
   const [vDotBalance, setVDotBalance] = useState(42.5); // Initial vDOT balance
   const [hasConnectedWallet, setHasConnectedWallet] = useState(false);
@@ -18,7 +31,7 @@ export default function Home() {
   const [hasExploredRewards, setHasExploredRewards] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [particles, setParticles] = useState(Array(20).fill(null).map(() => ({
+  const [particles, setParticles] = useState<Particle[]>(Array(20).fill(null).map(() => ({
     x: Math.random() * 100,
     y: Math.random() * 100,
     baseX: Math.random() * 100,
@@ -26,6 +39,8 @@ export default function Home() {
     size: Math.random() * 50 + 30,
     animationDelay: Math.random() * 10,
     animationDuration: Math.random() * 10 + 20,
+    targetX: Math.random() * 100,
+    targetY: Math.random() * 100,
   })));
 
   // Add mount detection
@@ -33,20 +48,32 @@ export default function Home() {
     setHasMounted(true);
   }, []);
 
-  // Add mouse move tracking
+  // Add new effect for random movement
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setParticles(prevParticles => prevParticles.map(particle => ({
+        ...particle,
+        targetX: particle.baseX + (Math.random() - 0.5) * 10, // Random movement within ±5% of base position
+        targetY: particle.baseY + (Math.random() - 0.5) * 10,
+      })));
+    }, 3000); // New target every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Update the mouse move effect to include smooth transition to target
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       const x = (e.clientX / window.innerWidth) * 100;
       const y = (e.clientY / window.innerHeight) * 100;
       setMousePosition({ x, y });
 
-      // Update particle positions based on cursor proximity
       setParticles(prevParticles => prevParticles.map(particle => {
         const dx = x - particle.baseX;
         const dy = y - particle.baseY;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        const repulsionRadius = 20; // Adjust this value to change the repulsion range
-        const repulsionStrength = 15; // Adjust this value to change the repulsion force
+        const repulsionRadius = 20;
+        const repulsionStrength = 15;
 
         if (distance < repulsionRadius) {
           const force = (1 - distance / repulsionRadius) * repulsionStrength;
@@ -57,16 +84,28 @@ export default function Home() {
           };
         }
 
+        // When not affected by cursor, move towards target
         return {
           ...particle,
-          x: particle.baseX,
-          y: particle.baseY,
+          x: particle.x + (particle.targetX! - particle.x) * 0.05,
+          y: particle.y + (particle.targetY! - particle.y) * 0.05,
         };
       }));
     };
 
+    const animationFrame = setInterval(() => {
+      setParticles(prevParticles => prevParticles.map(particle => ({
+        ...particle,
+        x: particle.x + (particle.targetX! - particle.x) * 0.05,
+        y: particle.y + (particle.targetY! - particle.y) * 0.05,
+      })));
+    }, 50); // Update positions every 50ms
+
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      clearInterval(animationFrame);
+    };
   }, []);
 
   // Remove scroll effect
